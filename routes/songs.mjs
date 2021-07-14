@@ -7,6 +7,8 @@ import mongoose from 'mongoose'
 const { ObjectId } = mongoose.Types
 const router = Router()
 
+//Ici on aurait pu utiliser PUT, PATCH, DELETE, mais cela pose des problèmes de CORS
+
 router.get('/', async (req, res) => {
     try {
         const songs = await SongModel.find({})
@@ -14,20 +16,7 @@ router.get('/', async (req, res) => {
     } catch (e) {
         res.json({
             error: true,
-            message: `error while retrieving songs : ${e.message}`
-        })
-    }
-})
-
-router.get('/:id', async (req, res) => {
-    try {
-        const song = await SongModel.findById(new ObjectId(req.params.id))
-        res.json(song)
-    } catch (e) {
-        res.status(404)
-        res.json({
-            error: true,
-            message: `no song found with id ${req.params.id}`
+            message: `Error while retrieving songs : ${e.message}`
         })
     }
 })
@@ -38,13 +27,13 @@ router.get('/delete/:id', async (req, res) => {
         res.status(200)
         res.json({
             error: false,
-            message: `song with id ${req.params.id} deleted successfully`
+            message: `Song with id ${req.params.id} deleted successfully`
         })
     } catch (e) {
         res.status(404)
         res.json({
             error: true,
-            message: `song with id ${req.params.id} don't exists`
+            message: `Song with id ${req.params.id} don't exists`
         })
     }
 })
@@ -52,31 +41,52 @@ router.get('/delete/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     try {
         const song = await SongModel.find({ _id: new ObjectId(req.params.id) })
-        if (!song.length) throw new Error(`Book don't exists`)
+        if (!song.length) throw new Error(`Song don't exists`)
         await SongModel.updateOne(
             { _id: new ObjectId(req.params.id) },
             req.body
         )
         res.json({
             error: false,
-            message: `book with id ${req.params.id} updated successfully`
+            message: `Song with id ${req.params.id} updated successfully`
         })
     } catch (e) {
         res.status(400)
         res.json({
             error: true,
-            message: `error updating song ${req.params.id}: ${e.message}`
+            message: `Error updating song ${req.params.id}: ${e.message}`
         })
     }
 })
 
-router.put('/', async (req, res) => {
+router.post('/update', async (req, res) => {
     try {
-        await SongModel.create(req.body)
-
+        const song = await SongModel.find({ _id: new ObjectId(req.body._id) })
+        if (!song.length) throw new Error(`Song don't exists`)
+        const updatedSong = await SongModel.updateOne(
+            { _id: new ObjectId(req.body._id) },
+            req.body
+        )
         res.json({
             error: false,
-            message: 'Song created successfully'
+            message: `Song with id ${req.params.id} updated successfully`
+        })
+    } catch (e) {
+        res.status(400)
+        res.json({
+            error: true,
+            message: `Error updating song ${req.params.id}: ${e.message}`
+        })
+    }
+})
+
+router.post('/add', async (req, res) => {
+    try {
+        const song = await SongModel.create(req.body)
+        res.json({
+            error: false,
+            message: 'Song created successfully',
+            song
         })
     } catch (e) {
         res.status(400)
@@ -86,5 +96,4 @@ router.put('/', async (req, res) => {
         })
     }
 })
-
 export default router
