@@ -7,7 +7,7 @@ const SongModel = mongoose.model(
         title: { type: String, required: true },
         artist: { type: String, required: true },
         album: { type: String, required: true },
-        released_at: { type: Date, required: false }
+        released_at: { type: Date, required: true }
     }),
     'list'
 )

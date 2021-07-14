@@ -63,10 +63,7 @@ router.post('/update', async (req, res) => {
     try {
         const song = await SongModel.find({ _id: new ObjectId(req.body._id) })
         if (!song.length) throw new Error(`Song don't exists`)
-        const updatedSong = await SongModel.updateOne(
-            { _id: new ObjectId(req.body._id) },
-            req.body
-        )
+        await SongModel.updateOne({ _id: new ObjectId(req.body._id) }, req.body)
         res.json({
             error: false,
             message: `Song with id ${req.params.id} updated successfully`
