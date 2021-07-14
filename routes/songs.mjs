@@ -1,17 +1,53 @@
 import { Router } from 'express'
+import mongoose from 'mongoose'
 
 import { SongModel } from '../database/models.mjs'
-
-import mongoose from 'mongoose'
 
 const { ObjectId } = mongoose.Types
 const router = Router()
 
-//Ici on aurait pu utiliser PUT, PATCH, DELETE, mais cela pose des problèmes de CORS
+//Ici on aurait pu utiliser PUT, PATCH, DELETE... mais cela pose des problèmes de CORS
 
 router.get('/', async (req, res) => {
     try {
         const songs = await SongModel.find({})
+        res.json(songs)
+    } catch (e) {
+        res.json({
+            error: true,
+            message: `Error while retrieving songs : ${e.message}`
+        })
+    }
+})
+
+router.get('/search/:searchValue', async (req, res) => {
+    try {
+        const songs = await SongModel.aggregate([
+            {
+                $match: {
+                    $or: [
+                        {
+                            title: {
+                                $regex: req.params.searchValue,
+                                $options: 'i'
+                            }
+                        },
+                        {
+                            artist: {
+                                $regex: req.params.searchValue,
+                                $options: 'i'
+                            }
+                        },
+                        {
+                            album: {
+                                $regex: req.params.searchValue,
+                                $options: 'i'
+                            }
+                        }
+                    ]
+                }
+            }
+        ])
         res.json(songs)
     } catch (e) {
         res.json({
