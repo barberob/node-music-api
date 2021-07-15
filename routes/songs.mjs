@@ -6,8 +6,9 @@ import { SongModel } from '../database/models.mjs'
 const { ObjectId } = mongoose.Types
 const router = Router()
 
-const songExists = async ({ name, artist, album }) => {
-    return await SongModel.exists({ name, artist, album })
+const songExists = async ({ title, artist, album }) => {
+    const song = await SongModel.find({ title, artist, album })
+    return song.length
 }
 
 //Ici on aurait pu utiliser PUT, PATCH, DELETE... mais cela pose des problèmes de CORS
