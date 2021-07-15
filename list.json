@@ -1,0 +1,38 @@
+[
+    {
+        "_id": {
+            "$oid": "60f024d2c39f733dc00ef11c"
+        },
+        "title": "Rapper's Delight",
+        "artist": "The Sugarhill Gang",
+        "album": "Sugarhill Gang",
+        "released_at": {
+            "$date": "1979-09-16T00:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "60f027ddeec8a941a3fcdac9"
+        },
+        "title": "Alexandrie Alexandra",
+        "artist": "Claude François",
+        "album": "Magnolias for Ever",
+        "released_at": {
+            "$date": "1978-03-15T00:00:00Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "60f02820eec8a941a3fcdacf"
+        },
+        "title": "Riders on the Storm",
+        "artist": "The Doors",
+        "album": "L.A Woman",
+        "released_at": {
+            "$date": "1971-06-01T00:00:00Z"
+        },
+        "__v": 0
+    }
+]
