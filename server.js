@@ -28,8 +28,8 @@ const startServer = async () => {
 
     routes(app)
 
-    app.listen(port, host, () => {
-        console.log(`Server listening at ${host}:${port}`)
+    app.listen(port, () => {
+        console.log(`Server listening...`)
     })
 }
 
