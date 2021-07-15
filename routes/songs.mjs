@@ -25,10 +25,6 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/search/:searchValue', async (req, res) => {
-    if (!req.params.searchValue) {
-        res.json({ error: true, message: 'No search parameter specified' })
-        return
-    }
     try {
         const songs = await SongModel.aggregate([
             {
