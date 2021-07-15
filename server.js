@@ -12,7 +12,7 @@ const startServer = async () => {
     dotenv.config()
 
     const app = express()
-    const port = process.env.PORT
+    const port = process.env.PORT || 3000
     const host = process.env.HOST
 
     app.use(cors)
