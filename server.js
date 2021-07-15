@@ -12,7 +12,7 @@ const startServer = async () => {
     dotenv.config()
 
     const app = express()
-    const port = process.env.PORT
+    const port = process.env.PORT || 3000
     const host = process.env.HOST
 
     app.use(cors)
@@ -28,8 +28,8 @@ const startServer = async () => {
 
     routes(app)
 
-    app.listen(port, host, () => {
-        console.log(`Server listening at ${host}:${port}`)
+    app.listen(port, () => {
+        console.log(`Server listening...`)
     })
 }
 
