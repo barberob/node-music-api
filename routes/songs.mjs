@@ -74,27 +74,6 @@ router.get('/delete/:id', async (req, res) => {
     }
 })
 
-router.patch('/:id', async (req, res) => {
-    try {
-        const song = await SongModel.find({ _id: new ObjectId(req.params.id) })
-        if (!song.length) throw new Error(`Song don't exists`)
-        await SongModel.updateOne(
-            { _id: new ObjectId(req.params.id) },
-            req.body
-        )
-        res.json({
-            error: false,
-            message: `Song with id ${req.params.id} updated successfully`
-        })
-    } catch (e) {
-        res.status(400)
-        res.json({
-            error: true,
-            message: `Error updating song ${req.params.id}: ${e.message}`
-        })
-    }
-})
-
 router.post('/update', async (req, res) => {
     try {
         const song = await SongModel.find({ _id: new ObjectId(req.body._id) })
@@ -115,6 +94,12 @@ router.post('/update', async (req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
+        const { name, artist, album } = req.body
+        const exists = await SongModel.exists({ name, artist, album })
+        if (exists) {
+            res.json({ error: true, exists: true })
+            return
+        }
         const song = await SongModel.create(req.body)
         res.json({
             error: false,
