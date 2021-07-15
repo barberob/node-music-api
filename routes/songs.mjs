@@ -6,6 +6,10 @@ import { SongModel } from '../database/models.mjs'
 const { ObjectId } = mongoose.Types
 const router = Router()
 
+const songExists = async ({ name, artist, album }) => {
+    return await SongModel.exists({ name, artist, album })
+}
+
 //Ici on aurait pu utiliser PUT, PATCH, DELETE... mais cela pose des problèmes de CORS
 
 router.get('/', async (req, res) => {
@@ -76,6 +80,10 @@ router.get('/delete/:id', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
+        if (await songExists(req.body)) {
+            res.json({ error: true, exists: true })
+            return
+        }
         const song = await SongModel.find({ _id: new ObjectId(req.body._id) })
         if (!song.length) throw new Error(`Song don't exists`)
         await SongModel.updateOne({ _id: new ObjectId(req.body._id) }, req.body)
@@ -94,9 +102,7 @@ router.post('/update', async (req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
-        const { name, artist, album } = req.body
-        const exists = await SongModel.exists({ name, artist, album })
-        if (exists) {
+        if (await songExists(req.body)) {
             res.json({ error: true, exists: true })
             return
         }
