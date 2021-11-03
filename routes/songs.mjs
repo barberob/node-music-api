@@ -11,7 +11,6 @@ const songExists = async ({ title, artist, album }) => {
     return song.length
 }
 
-//Ici on aurait pu utiliser PUT, PATCH, DELETE... mais cela pose des problèmes de CORS
 
 router.get('/', async (req, res) => {
     try {
